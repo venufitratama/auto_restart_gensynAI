@@ -2,9 +2,9 @@
 
 Requirements:
 1. VPS (Virtual Private Server)
-`i use contabo server (12gb RAM, 6 vCPU Cores) : https://contabo.com/en/vps/`
+> `i use contabo server (12gb RAM, 6 vCPU Cores) : https://contabo.com/en/vps/`
 2. ngrok
-`register : http://dashboard.ngrok.com/`
+> `register : http://dashboard.ngrok.com/`
 
 # INSTALLATION
 
@@ -167,4 +167,10 @@ useEffect(() => {
 `python -m hivemind_exp.gsm8k.train_single_gpu --hf_token "$HUGGINGFACE_ACCESS_TOKEN" --identity_path "$IDENTITY_PATH`
 ```bash
 export HF_HUB_ENABLE_HF_TRANSFER=0
+```
+
+### If Already taken by another peer
+```bash
+killall -9 python
+killall -9 p2pd
 ```
