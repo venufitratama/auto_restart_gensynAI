@@ -1,0 +1,41 @@
+# Model arguments
+model_name_or_path: unsloth/Qwen2.5-0.5B-Instruct
+model_revision: main
+torch_dtype: float32
+bf16: false
+tf32: false
+
+# Dataset arguments
+dataset_id_or_path: 'openai/gsm8k'
+
+# Training arguments
+max_steps: 20                        # dinaikkan supaya ada cukup iterasi untuk menghasilkan batch
+per_device_train_batch_size: 1
+gradient_accumulation_steps: 4       # diturunkan agar tidak menunda terlalu lama proses optimizer step
+gradient_checkpointing: false
+learning_rate: 5.0e-7                # sedikit dinaikkan agar training tetap berjalan wajar
+lr_scheduler_type: linear
+warmup_ratio: 0.01
+dataloader_pin_memory: false
+
+# GRPO arguments
+use_vllm: false
+num_generations: 2
+beta: 0.001
+max_prompt_length: 128
+max_completion_length: 512
+
+# Logging
+logging_strategy: steps
+logging_steps: 5                     # tidak terlalu sering logging
+report_to:
+- tensorboard
+save_strategy: "steps"
+save_steps: 25
+seed: 42
+
+# Script arguments
+max_rounds: 10000
+
+# Output
+output_dir: runs/gsm8k/multinode/Qwen2.5-0.5B-Instruct-Gensyn-Swarm-lite

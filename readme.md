@@ -2,9 +2,9 @@
 
 Requirements:
 1. VPS (Virtual Private Server)
-i use contabo server (12gb RAM, 6 vCPU Cores)
+`i use contabo server (12gb RAM, 6 vCPU Cores) : https://contabo.com/en/vps/`
 2. ngrok
-register : dashboard.ngrok.com/login
+`register : http://dashboard.ngrok.com/`
 
 # INSTALLATION
 
@@ -52,7 +52,7 @@ source .venv/bin/activate
 - after that you need to download & replace this file `grpo-qwen-2.5-0.5b-deepseek-r1.yaml` into `cd rl-swarm/hivemind_exp/configs/mac/`
 
 ### Register Ngrok
-- dashboard.ngrok.com/login
+- http://dashboard.ngrok.com/login
 - Open this : https://dashboard.ngrok.com/get-started/setup/linux
 - Follow the first two step (until here `ngrok config add-authtoken 2vFxxxxxxxxxx`)
 - Change third config into : 
@@ -86,7 +86,17 @@ Make it permanent
 echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
 ```
 
+### Double Check Ngrok
+```bash
+ngrok http http:://localhost:3000
+```
+make sure ngrok use the email you are using
+
 ### Get Back Inside the Screen
+```bash
+screen -r gensyn
+```
+
 Run RL Swarm!
 ```bash
 ./run_rl_swarm.sh
@@ -97,7 +107,11 @@ Run RL Swarm!
 - Use Math (A)
 - Parameter 0.5
 - Upload to HuggingFace : N
+`Now you should see 3 unique animal words and PeerID, save it to track your progress`
 
+### Important!
+- Back up your temp-data - inside rl-swarm/modal-login/temp-data (save it somewhere save, do not lose it!)
+- Back up swarm.pem - inside rl-swarm (save it somewhere save, do not lose it!)
 
 # TROUBLESHOOTING
 
@@ -106,6 +120,35 @@ Run RL Swarm!
 nano $(python3 -c "import hivemind.p2p.p2p_daemon as m; print(m.__file__)")
 ```
 find this `startup_timeout: float = 15` and change it into `startup_timeout: float = 120`
+
+### Daemon failed to start: 2025/05/15 xxxxxx failed to connect to bootstrap peers
+```bash
+nano hivemind_exp/runner/gensyn/testnet_grpo_runner.py
+```
+
+Change This:
+```bash
+def get initial peers (self) →> list[str]:
+return self.coordinator.get bootnodes()
+```
+
+Into:
+```bash
+def get_initial_peers(self) -> list[str]:
+    # Skip chain lookup if no peers provided
+        if not getattr(self, 'force_chain_lookup', True):
+                return []
+
+    # Original chain lookup
+        peers = self.coordinator.get_bootnodes()
+        logger.info(f"Bootnodes from chain: {peers}")
+
+    # Filter out dead peers (optional)
+        alive_peers = [p for p in peers if not p.startswith('/ip4/38.101.215.15')]
+        return alive_peers if alive_peers else []
+```
+
+
 
 ### Waiting for modal userData.json to be created too long (like hours) or Can't login to the website
 ```bash
