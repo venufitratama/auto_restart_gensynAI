@@ -174,3 +174,6 @@ export HF_HUB_ENABLE_HF_TRANSFER=0
 killall -9 python
 killall -9 p2pd
 ```
+Use this command to check if peer already killed or not
+`ps aux | grep swarm`
+`ps aux | grep p2pd`
