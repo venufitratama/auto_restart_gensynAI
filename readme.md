@@ -61,9 +61,9 @@ ngrok http http://localhost:3000
 ```
 
 ### Memory Swap
-Create a 4GB swap file (adjust size if needed)
+Create a 16GB swap file (adjust size if needed)
 ```bash
-sudo fallocate -l 4G /swapfile
+sudo fallocate -l 16G /swapfile
 ```
 
 Set correct permissions
